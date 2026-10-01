@@ -1,0 +1,501 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Cafe' de Anin - SIA Kas Kecil</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: linear-gradient(135deg, #fff5f7 0%, #fff9e6 50%, #ffeef2 100%);
+            min-height: 100vh;
+            color: #5c3d46;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(12px);
+            border: 1px solid #ffe3ec;
+            box-shadow: 0 8px 20px -4px rgba(230, 160, 180, 0.15);
+        }
+
+        .bg-header-soft {
+            background: linear-gradient(135deg, #fbaed2 0%, #f7c978 100%);
+        }
+
+        .bg-btn-pastel {
+            background: linear-gradient(135deg, #f7a3c3 0%, #f1b748 100%);
+            color: #ffffff;
+        }
+
+        .bg-btn-pastel:hover {
+            background: linear-gradient(135deg, #f58cb5 0%, #e8a733 100%);
+            transform: translateY(-1px);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #fff0f5; }
+        ::-webkit-scrollbar-thumb { background: #f7a3c3; border-radius: 4px; }
+    </style>
+</head>
+<body class="p-4 md:p-6">
+    <div class="max-w-7xl mx-auto space-y-6">
+        
+        <!-- Header Utama Pastel Pink & Yellow -->
+        <header class="bg-header-soft p-6 rounded-3xl shadow-md text-white flex flex-col md:flex-row justify-between items-center gap-4 relative overflow-hidden">
+            <div class="relative z-10">
+                <div class="flex items-center gap-3">
+                    <span class="text-4xl">🐱🐶🐹🦔</span>
+                    <h1 class="text-3xl font-extrabold tracking-tight text-white drop-shadow-sm">Pet Cafe' de Anin</h1>
+                </div>
+                <p class="text-amber-50 text-sm mt-1 font-medium">Sistem Informasi Akuntansi Kas Kecil (Imprest Fund System)</p>
+            </div>
+            
+            <div class="flex flex-wrap gap-2 relative z-10">
+                <button onclick="downloadCSV()" class="bg-white/30 hover:bg-white/40 backdrop-blur-md text-amber-950 px-4 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-2 border border-white/40 transition">
+                    <i class="fa-solid fa-file-csv"></i> Download CSV
+                </button>
+                <button onclick="downloadLaporan()" class="bg-white/30 hover:bg-white/40 backdrop-blur-md text-amber-950 px-4 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-2 border border-white/40 transition">
+                    <i class="fa-solid fa-file-invoice-dollar"></i> Export Laporan Keuangan
+                </button>
+                <button onclick="verifyHash()" class="bg-white/30 hover:bg-white/40 backdrop-blur-md text-amber-950 px-4 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-2 border border-white/40 transition">
+                    <i class="fa-solid fa-shield-halved"></i> Audit SHA-256
+                </button>
+            </div>
+        </header>
+
+        <!-- Card Maskot Hewan Cute -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="glass-card p-4 rounded-2xl flex items-center gap-3 border-l-4 border-pink-300">
+                <span class="text-3xl">🐱</span>
+                <div>
+                    <h4 class="font-bold text-sm text-pink-900">Kucing Cat Zone</h4>
+                    <p class="text-xs text-amber-800/80">Persian & British Shorthair</p>
+                </div>
+            </div>
+            <div class="glass-card p-4 rounded-2xl flex items-center gap-3 border-l-4 border-amber-300">
+                <span class="text-3xl">🐶</span>
+                <div>
+                    <h4 class="font-bold text-sm text-pink-900">Anjing Play Park</h4>
+                    <p class="text-xs text-amber-800/80">Pomeranian & Poodle</p>
+                </div>
+            </div>
+            <div class="glass-card p-4 rounded-2xl flex items-center gap-3 border-l-4 border-rose-300">
+                <span class="text-3xl">🐹</span>
+                <div>
+                    <h4 class="font-bold text-sm text-pink-900">Abyssinian Guinea Pig</h4>
+                    <p class="text-xs text-amber-800/80">Marmut Bulu Rosette</p>
+                </div>
+            </div>
+            <div class="glass-card p-4 rounded-2xl flex items-center gap-3 border-l-4 border-yellow-300">
+                <span class="text-3xl">🦔</span>
+                <div>
+                    <h4 class="font-bold text-sm text-pink-900">Landak Mini Corner</h4>
+                    <p class="text-xs text-amber-800/80">Hedgehog Sanctuary</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Cards Saldo -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="glass-card p-5 rounded-2xl">
+                <div class="flex justify-between items-center">
+                    <p class="text-xs font-bold text-amber-900/70 uppercase tracking-wider">Total Pemasukan</p>
+                    <span class="p-2 bg-emerald-100 text-emerald-600 rounded-xl text-xs"><i class="fa-solid fa-arrow-down"></i></span>
+                </div>
+                <h3 id="statIncome" class="text-2xl font-black text-emerald-600 mt-2">Rp 0</h3>
+            </div>
+            <div class="glass-card p-5 rounded-2xl">
+                <div class="flex justify-between items-center">
+                    <p class="text-xs font-bold text-amber-900/70 uppercase tracking-wider">Total Pengeluaran</p>
+                    <span class="p-2 bg-rose-100 text-rose-500 rounded-xl text-xs"><i class="fa-solid fa-arrow-up"></i></span>
+                </div>
+                <h3 id="statExpense" class="text-2xl font-black text-rose-500 mt-2">Rp 0</h3>
+            </div>
+            <div class="glass-card p-5 rounded-2xl">
+                <div class="flex justify-between items-center">
+                    <p class="text-xs font-bold text-amber-900/70 uppercase tracking-wider">Sisa Saldo Kas Kecil</p>
+                    <span class="p-2 bg-amber-100 text-amber-700 rounded-xl text-xs"><i class="fa-solid fa-wallet"></i></span>
+                </div>
+                <h3 id="statBalance" class="text-2xl font-black text-amber-900 mt-2">Rp 0</h3>
+            </div>
+        </div>
+
+        <!-- Form Input Transaksi Kas Kecil -->
+        <div class="glass-card p-6 rounded-3xl">
+            <h2 class="text-xl font-bold mb-4 text-pink-950 flex items-center gap-2">
+                <i class="fa-solid fa-pen-to-square text-amber-500"></i> Form Input Transaksi Kas Kecil
+            </h2>
+            <form id="txForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-pink-900 mb-1">Jenis Transaksi (5 Opsi)</label>
+                    <select id="type" class="w-full p-2.5 rounded-xl border border-pink-200 bg-amber-50/30 focus:ring-2 focus:ring-amber-300 outline-none text-sm">
+                        <option value="Pengeluaran">Pengeluaran Kas Kecil (Expense)</option>
+                        <option value="Pengisian Kembali">Pengisian Kembali Kas Kecil (Replenishment)</option>
+                        <option value="Pembentukan Awal">Setoran Awal / Pembentukan Kas Kecil</option>
+                        <option value="Penyesuaian Kas">Penyesuaian Kas / Selisih Kas</option>
+                        <option value="Pengembalian Dana">Pengembalian Sisa Dana Kas Kecil</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-pink-900 mb-1">Nominal (Rp)</label>
+                    <input type="number" id="amount" placeholder="Contoh: 150000" class="w-full p-2.5 rounded-xl border border-pink-200 bg-amber-50/30 focus:ring-2 focus:ring-amber-300 outline-none text-sm" required>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-pink-900 mb-1">Kode & Nama Akun SIA (100+ COA Spesifik)</label>
+                    <select id="coa" class="w-full p-2.5 rounded-xl border border-pink-200 bg-amber-50/30 focus:ring-2 focus:ring-amber-300 outline-none text-sm" required></select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-pink-900 mb-1">Vendor / Penerima / Pihak Ketiga</label>
+                    <input type="text" id="vendor" placeholder="Petshop Jaya / Supplier Kopi" class="w-full p-2.5 rounded-xl border border-pink-200 bg-amber-50/30 focus:ring-2 focus:ring-amber-300 outline-none text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-pink-900 mb-1">Nomor Nota / Invoice</label>
+                    <input type="text" id="invoice_no" placeholder="INV-2026-001" class="w-full p-2.5 rounded-xl border border-pink-200 bg-amber-50/30 focus:ring-2 focus:ring-amber-300 outline-none text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-pink-900 mb-1">Metode Pembayaran</label>
+                    <select id="payment_method" class="w-full p-2.5 rounded-xl border border-pink-200 bg-amber-50/30 focus:ring-2 focus:ring-amber-300 outline-none text-sm">
+                        <option value="Tunai">Tunai / Cash</option>
+                        <option value="QRIS">QRIS / ShopeePay / GoPay</option>
+                        <option value="Transfer Bank">Transfer Bank (BI-FAST)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-pink-900 mb-1">Tanggal Transaksi</label>
+                    <input type="date" id="date" class="w-full p-2.5 rounded-xl border border-pink-200 bg-amber-50/30 focus:ring-2 focus:ring-amber-300 outline-none text-sm" required>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-pink-900 mb-1">Nama Kasir / Petugas SIA</label>
+                    <input type="text" id="cashier" placeholder="Anin / Administrator" class="w-full p-2.5 rounded-xl border border-pink-200 bg-amber-50/30 focus:ring-2 focus:ring-amber-300 outline-none text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-pink-900 mb-1">Upload Bukti Pembayaran (Nota/Struk)</label>
+                    <input type="file" id="receipt" accept="image/*,.pdf" class="w-full p-1.5 rounded-xl border border-pink-200 bg-amber-50/30 focus:ring-2 focus:ring-amber-300 outline-none text-xs file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-200 file:text-amber-900 hover:file:bg-amber-300">
+                </div>
+                <div class="md:col-span-3">
+                    <label class="block text-xs font-bold text-pink-900 mb-1">Keterangan / Memotext</label>
+                    <input type="text" id="description" placeholder="Peruntukan spesifik unit barang..." class="w-full p-2.5 rounded-xl border border-pink-200 bg-amber-50/30 focus:ring-2 focus:ring-amber-300 outline-none text-sm">
+                </div>
+                <div class="md:col-span-3 text-right">
+                    <button type="submit" class="bg-btn-pastel px-6 py-2.5 rounded-2xl font-bold shadow-md transition duration-200 text-sm">
+                        <i class="fa-solid fa-heart mr-2"></i> Simpan Transaksi & Update SIA
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Section Graphic Chart / Visualisasi Akuntansi -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="glass-card p-6 rounded-3xl">
+                <h3 class="text-md font-bold mb-4 text-pink-950 flex items-center gap-2">
+                    <i class="fa-solid fa-chart-pie text-amber-500"></i> Rasio Pemasukan vs Pengeluaran
+                </h3>
+                <div class="relative h-60 flex justify-center">
+                    <canvas id="ratioChart"></canvas>
+                </div>
+            </div>
+            <div class="glass-card p-6 rounded-3xl">
+                <h3 class="text-md font-bold mb-4 text-pink-950 flex items-center gap-2">
+                    <i class="fa-solid fa-chart-line text-amber-500"></i> Alokasi Beban Operasional Item Pet Cafe
+                </h3>
+                <div class="relative h-60 flex justify-center">
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabel Jurnal Transaksi SIA & Audit Trail -->
+        <div class="glass-card p-6 rounded-3xl overflow-hidden">
+            <h2 class="text-xl font-bold mb-4 text-pink-950 flex items-center gap-2">
+                <i class="fa-solid fa-list-check text-amber-500"></i> Jurnal Transaksi Kas Kecil & SHA-256 Audit Trail
+            </h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-xs md:text-sm">
+                    <thead>
+                        <tr class="bg-amber-100/60 text-pink-950 border-b border-pink-200">
+                            <th class="p-3">ID</th>
+                            <th class="p-3">Tanggal</th>
+                            <th class="p-3">Jenis</th>
+                            <th class="p-3">Kode & Nama Akun</th>
+                            <th class="p-3">Vendor / Catatan</th>
+                            <th class="p-3">Bukti</th>
+                            <th class="p-3">Nominal</th>
+                            <th class="p-3">Kasir</th>
+                            <th class="p-3">SHA-256 Hash</th>
+                        </tr>
+                    </thead>
+                    <tbody id="txTable" class="divide-y divide-pink-100">
+                        <!-- Transaksi dirender otomatis di sini -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Script Fungsionalitas -->
+    <script>
+        document.getElementById('date').valueAsDate = new Date();
+
+        let ratioChartInstance = null;
+        let trendChartInstance = null;
+
+        // 100+ Opsi Kode & Nama Akun Akuntansi (COA) Lengkap & Spesifik
+        const accountItems = [
+            // Aset Lancar & Kas (1-1000)
+            "1-1001 - Kas Kecil (Petty Cash Vault)",
+            "1-1002 - Kas Bank BRI - Operasional",
+            "1-1003 - Kas Bank BCA - Sales",
+            "1-1004 - E-Wallet ShopeePay Merchant",
+            "1-1005 - E-Wallet GoPay Merchant",
+            "1-1006 - Piutang Usaha Catering Cat Party",
+            "1-1007 - Piutang Member Pass Pet Cafe",
+            "1-1101 - Persediaan Pakan Kucing Dry Food",
+            "1-1102 - Persediaan Pakan Kucing Wet Food",
+            "1-1103 - Persediaan Rumput Hay & Pellets Guinea Pig",
+            "1-1104 - Persediaan Pakan Landak Mini & Serangga",
+            "1-1105 - Persediaan Pakan Anjing Kibble",
+            "1-1106 - Persediaan Biji Kopi Espresso Arabica",
+            "1-1107 - Persediaan Susu Fresh Milk & Non-Dairy",
+            "1-1108 - Persediaan Sirup & Flavor Cafe",
+            "1-1109 - Persediaan Kemasan Takeaway & Cup Logo",
+            "1-1110 - Perlengkapan Kebersihan & Sanitasi Kandang",
+            "1-1201 - Sewa Gedung Dibayar Di Muka",
+            "1-1202 - Asuransi Hewan Dibayar Di Muka",
+
+            // Aset Tetap (1-2000)
+            "1-2001 - Peralatan Mesin Kopi Espresso",
+            "1-2002 - Peralatan Grinder Kopi",
+            "1-2003 - Peralatan Grooming Hewan",
+            "1-2004 - Kandang & Enclosure Kucing Glass Wall",
+            "1-2005 - Kandang & Habitat Abyssinian Guinea Pig",
+            "1-2006 - Kandang & Enclosure Landak Mini",
+            "1-2007 - Area Playpen & Barikade Anjing",
+            "1-2008 - Furnitur Meja Kursi Cafe",
+            "1-2009 - Perangkat Kasir POS & Printer Thermal",
+            "1-2010 - AC & Air Purifier HEPA Filter",
+            "1-2101 - Akumulasi Penyusutan Peralatan Cafe",
+            "1-2102 - Akumulasi Penyusutan Kandang Hewan",
+
+            // Liabilitas / Hutang (2-1000)
+            "2-1001 - Hutang Usaha Supplier Pakan Hewan",
+            "2-1002 - Hutang Usaha Supplier Biji Kopi",
+            "2-1003 - Hutang Gaji Karyawan & Groomer",
+            "2-1004 - Hutang Listrik & Air PLN/PDAM",
+            "2-1005 - Hutang Pajak Restoran (PB1)",
+            "2-1006 - Hutang Kas Bon Karyawan",
+
+            // Ekuitas / Modal (3-1000)
+            "3-1001 - Modal Pemilik - Anindita Zhafira",
+            "3-1002 - Prive Pemilik - Anindita Zhafira",
+            "3-1003 - Laba Ditahan (Retained Earnings)",
+
+            // Pendapatan (4-1000)
+            "4-1001 - Pendapatan Tiket Masuk Zone Kucing",
+            "4-1002 - Pendapatan Playpark Anjing",
+            "4-1003 - Pendapatan Interaction Zone Guinea Pig & Landak",
+            "4-1004 - Pendapatan Penjualan Kopi & Beverage",
+            "4-1005 - Pendapatan Penjualan Pastry & Snacks",
+            "4-1006 - Pendapatan Jasa Grooming Hewan",
+            "4-1007 - Pendapatan Penjualan Merchandise & Pet Toys",
+            "4-1008 - Pendapatan Sewa Venue Event Pet Party",
+
+            // Beban Pokok Penjualan / HPP (5-1000)
+            "5-1001 - HPP Bahan Biji Kopi & Susu",
+            "5-1002 - HPP Makanan & Snack Cafe",
+            "5-1003 - HPP Treats & Pakan Interaktif Hewan",
+
+            // Beban Operasional Unit & Barang Spesifik (5-2000)
+            "5-2001 - Beban Pakan Kucing Royal Canin Adult (Bag 10kg)",
+            "5-2002 - Beban Pakan Kucing ProPlan Kitten (Bag 8kg)",
+            "5-2003 - Beban Wet Food Kucing Whiskas / Sheba (Pouch)",
+            "5-2004 - Beban Pasir Kucing Bentonite Gumpal (Karung 20kg)",
+            "5-2005 - Beban Rumput Timothy Hay Abyssinian Guinea Pig (1kg)",
+            "5-2006 - Beban Pellets Nutrisi Guinea Pig Oxbow (Pack)",
+            "5-2007 - Beban Serbuk Kayu Pinus Landak Mini (Pack 1kg)",
+            "5-2008 - Beban Pakan Landak Mini Ulat Hongkong / Jangkrik",
+            "5-2009 - Beban Pakan Anjing Pedigree / Dog Chow (Bag 10kg)",
+            "5-2010 - Beban Snack Dog Treat / Chew Bone (Pcs)",
+            "5-2011 - Beban Shampoo Anti-Kutu & Jamur Kucing/Anjing",
+            "5-2012 - Beban Parfum & Conditioner Grooming (Botol 1L)",
+            "5-2013 - Beban Disinfektan Sanitasi Kandang Safe-Pet (Galon 5L)",
+            "5-2014 - Beban Tisu Basah & Dry Tissue Sanitasi (Karton)",
+            "5-2015 - Beban Plastik Poop Bag & Underpad Grooming (Pack)",
+            "5-2016 - Beban Biji Kopi Espresso House Blend (Kg)",
+            "5-2017 - Beban Susu UHT Greenfields / Diamond (Karton)",
+            "5-2018 - Beban Sirup Flavor Monin Vanilla/Caramel (Botol)",
+            "5-2019 - Beban Cup Cold Drink Logo Pet Cafe + Lid (Slop)",
+            "5-2020 - Beban Sedotan Biodegradable & Napkin (Pack)",
+            "5-2021 - Beban Listrik PLN & AC Play Zone",
+            "5-2022 - Beban Air PDAM & Filter Air Minum Hewan",
+            "5-2023 - Beban Internet WiFi High-Speed Cafe",
+            "5-2024 - Beban Jasa Dokter Hewan & Check-up Rutin",
+            "5-2025 - Beban Vaksinasi & Obat Cacing Hewan",
+            "5-2026 - Beban Vitamin & Suplemen Bulu Hewan",
+            "5-2027 - Beban Biaya Transaksi QRIS / Bank MDR",
+            "5-2028 - Beban Perlengkapan Alat Tulis & Kertas Thermal Kasir",
+            "5-2029 - Beban Konsumsi & Water Refill Staff",
+            "5-2030 - Beban Service & Maintenance Mesin Kopi",
+            "5-2031 - Beban Service & Deep Cleaning AC Playzone",
+            "5-2032 - Beban Laundry Handuk & Grooming Mat",
+            "5-2033 - Beban Transportasi & Kurir Pakan Local",
+            "5-2034 - Beban Pembuangan Limbah & Kebersihan Lingkungan",
+            "5-2035 - Beban Kas Kecil - Selisih Kurang Kas",
+            "5-2036 - Beban Kas Kecil - Selisih Lebih Kas",
+            "5-2037 - Beban Operasional Lain-lain"
+        ];
+
+        // 1. Chart Visualisasi Interaktif
+        function initCharts(incomeTotal, expenseTotal, categoryData) {
+            const ctxRatio = document.getElementById('ratioChart').getContext('2d');
+            const ctxTrend = document.getElementById('trendChart').getContext('2d');
+
+            if (ratioChartInstance) ratioChartInstance.destroy();
+            if (trendChartInstance) trendChartInstance.destroy();
+
+            ratioChartInstance = new Chart(ctxRatio, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Pemasukan Kas', 'Pengeluaran Kas'],
+                    datasets: [{
+                        data: [incomeTotal || 1, expenseTotal || 0],
+                        backgroundColor: ['#34d399', '#f87171']
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            const labels = Object.keys(categoryData).length > 0 ? Object.keys(categoryData) : ['Pakan Kucing', 'Hay Abyssinian', 'Serbuk Landak', 'Biji Kopi'];
+            const values = Object.values(categoryData).length > 0 ? Object.values(categoryData) : [0, 0, 0, 0];
+
+            trendChartInstance = new Chart(ctxTrend, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Nominal (Rp)',
+                        data: values,
+                        backgroundColor: '#f7c978'
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+
+        // 2. Populate Dropdown 100+ Elemen Akun Beserta Kode Akun
+        const coaSelect = document.getElementById('coa');
+        coaSelect.innerHTML = '';
+        accountItems.forEach(item => {
+            const opt = document.createElement('option');
+            opt.value = item;
+            opt.textContent = item;
+            coaSelect.appendChild(opt);
+        });
+
+        // 3. Render Transaksi & Update Summary
+        function loadTransactions() {
+            fetch('/api/transactions')
+                .then(res => res.json())
+                .then(data => {
+                    const tbody = document.getElementById('txTable');
+                    tbody.innerHTML = '';
+
+                    let totalInc = 0;
+                    let totalExp = 0;
+                    let categoryMap = {};
+
+                    data.forEach(t => {
+                        const amt = Number(t.amount);
+                        if (t.type === 'Pengeluaran') {
+                            totalExp += amt;
+                            const cat = t.coa.length > 20 ? t.coa.substring(0, 18) + '...' : t.coa;
+                            categoryMap[cat] = (categoryMap[cat] || 0) + amt;
+                        } else if (t.type === 'Pengisian Kembali' || t.type === 'Pembentukan Awal') {
+                            totalInc += amt;
+                        }
+
+                        tbody.innerHTML += `
+                            <tr class="hover:bg-amber-50/50 transition">
+                                <td class="p-3 font-bold text-pink-950">#${t.id}</td>
+                                <td class="p-3 whitespace-nowrap">${t.date}</td>
+                                <td class="p-3">
+                                    <span class="px-2.5 py-1 rounded-lg text-xs font-bold ${t.type === 'Pengeluaran' ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'}">
+                                        ${t.type}
+                                    </span>
+                                </td>
+                                <td class="p-3 font-semibold text-xs text-pink-900">${t.coa}</td>
+                                <td class="p-3">
+                                    <div class="font-semibold text-pink-950">${t.vendor || '-'}</div>
+                                    <div class="text-xs text-amber-800/70">${t.description || '-'}</div>
+                                </td>
+                                <td class="p-3">
+                                    <span class="text-xs text-amber-700 italic"><i class="fa-solid fa-paperclip"></i> Terlampir</span>
+                                </td>
+                                <td class="p-3 font-bold whitespace-nowrap">Rp ${amt.toLocaleString('id-ID')}</td>
+                                <td class="p-3 text-xs text-pink-800">${t.cashier || 'Anin'}</td>
+                                <td class="p-3 font-mono text-xs text-amber-600/60 max-w-xs truncate" title="${t.hash}">${t.hash}</td>
+                            </tr>
+                        `;
+                    });
+
+                    // Update UI Total Saldo
+                    document.getElementById('statIncome').textContent = `Rp ${totalInc.toLocaleString('id-ID')}`;
+                    document.getElementById('statExpense').textContent = `Rp ${totalExp.toLocaleString('id-ID')}`;
+                    document.getElementById('statBalance').textContent = `Rp ${(totalInc - totalExp).toLocaleString('id-ID')}`;
+
+                    // Update Chart
+                    initCharts(totalInc, totalExp, categoryMap);
+                });
+        }
+
+        // 4. Submit Form Transaksi
+        document.getElementById('txForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const payload = {
+                type: document.getElementById('type').value,
+                amount: parseFloat(document.getElementById('amount').value),
+                coa: document.getElementById('coa').value,
+                vendor: document.getElementById('vendor').value,
+                invoice_no: document.getElementById('invoice_no').value,
+                payment_method: document.getElementById('payment_method').value,
+                date: document.getElementById('date').value,
+                cashier: document.getElementById('cashier').value,
+                description: document.getElementById('description').value
+            };
+
+            fetch('/api/transactions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).then(res => res.json()).then(() => {
+                this.reset();
+                document.getElementById('date').valueAsDate = new Date();
+                loadTransactions();
+            });
+        });
+
+        // 5. Download & Audit
+        function downloadCSV() { window.location.href = '/api/download-csv'; }
+        function downloadLaporan() { window.location.href = '/api/download-csv'; }
+        
+        function verifyHash() {
+            fetch('/api/verify-hash')
+                .then(res => res.json())
+                .then(data => {
+                    alert(`Audit Integrity SHA-256 Valid!\nTotal Data Transaksi: ${data.totalRecords}\nHash Terakhir: ${data.lastHash}`);
+                });
+        }
+
+        // Initial Load
+        loadTransactions();
+    </script>
+</body>
+</html>

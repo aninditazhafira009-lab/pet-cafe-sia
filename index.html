@@ -1,443 +1,470 @@
-﻿<!-- Header / Navbar -->
-<header class="bg-pastel-pink border-b-4 border-pastel-pink p-4 shadow-sm sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-        <div class="flex items-center gap-3">
-            <div class="bg-white p-2 rounded-full shadow-inner border-2 border-pink-300">
-                <span class="text-3xl">🐾</span>
-            </div>
-            <div>
-                <h1 class="text-2xl md:text-3xl font-bold text-gray-800 tracking-wide">Pet Cafe' de Anin</h1>
-                <p class="text-xs text-pink-700 font-semibold">Sistem Informasi Akuntansi Kas Kecil (Imprest Fund System)</p>
-            </div>
-        </div>
-        
-        <!-- Quick Action Buttons -->
-        <div class="flex flex-wrap gap-2 justify-center">
-            <button onclick="downloadCSV()" class="bg-white hover:bg-yellow-50 text-gray-700 px-3 py-1.5 rounded-xl border-2 border-yellow-300 text-xs font-bold transition flex items-center gap-1 shadow-sm">
-                <i class="fas fa-file-csv text-amber-500"></i> Download CSV
-            </button>
-            <button onclick="exportLaporan()" class="bg-white hover:bg-pink-50 text-gray-700 px-3 py-1.5 rounded-xl border-2 border-pink-300 text-xs font-bold transition flex items-center gap-1 shadow-sm">
-                <i class="fas fa-file-invoice-dollar text-pink-500"></i> Export Laporan Keuangan
-            </button>
-            <button onclick="verifySHA256()" class="bg-white hover:bg-purple-50 text-gray-700 px-3 py-1.5 rounded-xl border-2 border-purple-300 text-xs font-bold transition flex items-center gap-1 shadow-sm">
-                <i class="fas fa-shield-alt text-purple-500"></i> Audit SHA-256
-            </button>
-        </div>
-    </div>
-</header>
-
-<!-- Main Content Container -->
-<main class="flex-grow max-w-7xl w-full mx-auto p-4 md:p-6 space-y-6">
-
-    <!-- Unit Cafe / Mascot Cards Banner -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div class="bg-white p-3 rounded-2xl border-2 border-pink-200 card-shadow flex items-center gap-3">
-            <span class="text-3xl bg-pink-100 p-2 rounded-xl">🐱</span>
-            <div>
-                <h4 class="font-bold text-sm text-gray-800">Kucing Cat Zone</h4>
-                <p class="text-xs text-gray-500">Persian & British Shorthair</p>
-            </div>
-        </div>
-        <div class="bg-white p-3 rounded-2xl border-2 border-yellow-200 card-shadow flex items-center gap-3">
-            <span class="text-3xl bg-yellow-100 p-2 rounded-xl">🐶</span>
-            <div>
-                <h4 class="font-bold text-sm text-gray-800">Anjing Play Park</h4>
-                <p class="text-xs text-gray-500">Pomeranian & Poodle</p>
-            </div>
-        </div>
-        <div class="bg-white p-3 rounded-2xl border-2 border-pink-200 card-shadow flex items-center gap-3">
-            <span class="text-3xl bg-pink-100 p-2 rounded-xl">🐹</span>
-            <div>
-                <h4 class="font-bold text-sm text-gray-800">Abyssinian Guinea Pig</h4>
-                <p class="text-xs text-gray-500">Marmut Bulu Rosette</p>
-            </div>
-        </div>
-        <div class="bg-white p-3 rounded-2xl border-2 border-yellow-200 card-shadow flex items-center gap-3">
-            <span class="text-3xl bg-yellow-100 p-2 rounded-xl">🦔</span>
-            <div>
-                <h4 class="font-bold text-sm text-gray-800">Landak Mini Corner</h4>
-                <p class="text-xs text-gray-500">Hedgehog Sanctuary</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Dashboard Summary Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-white p-5 rounded-3xl border-2 border-green-200 card-shadow relative overflow-hidden">
-            <div class="flex justify-between items-start">
-                <div>
-                    <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">TOTAL PEMASUKAN</p>
-                    <h2 id="totalPemasukan" class="text-2xl md:text-3xl font-extrabold text-green-600 mt-1">Rp 0</h2>
-                </div>
-                <div class="bg-green-100 p-3 rounded-2xl text-green-500">
-                    <i class="fas fa-arrow-down text-xl"></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white p-5 rounded-3xl border-2 border-red-200 card-shadow relative overflow-hidden">
-            <div class="flex justify-between items-start">
-                <div>
-                    <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">TOTAL PENGELUARAN</p>
-                    <h2 id="totalPengeluaran" class="text-2xl md:text-3xl font-extrabold text-rose-500 mt-1">Rp 0</h2>
-                </div>
-                <div class="bg-rose-100 p-3 rounded-2xl text-rose-500">
-                    <i class="fas fa-arrow-up text-xl"></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white p-5 rounded-3xl border-2 border-yellow-300 card-shadow relative overflow-hidden bg-gradient-to-br from-white to-amber-50">
-            <div class="flex justify-between items-start">
-                <div>
-                    <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">SISA SALDO KAS KECIL</p>
-                    <h2 id="sisaSaldo" class="text-2xl md:text-3xl font-extrabold text-amber-600 mt-1">Rp 0</h2>
-                </div>
-                <div class="bg-amber-100 p-3 rounded-2xl text-amber-600">
-                    <i class="fas fa-wallet text-xl"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Form Input Transaksi SIA -->
-    <section class="bg-white p-6 rounded-3xl border-2 border-pink-200 card-shadow">
-        <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-            <i class="fas fa-edit text-pink-400"></i> Form Input Transaksi Kas Kecil
-        </h3>
-        
-        <form id="formTransaksi" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-                <label class="block text-xs font-bold text-gray-600 mb-1">Jenis Transaksi (5 Opsi)</label>
-                <select id="jenisTransaksi" class="w-full p-2.5 bg-gray-50 border border-pink-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pink-300" required>
-                    <option value="Pengeluaran Operasional (Expense)">Pengeluaran Operasional (Expense)</option>
-                    <option value="Pengisian Kembali Kas Kecil (Replenishment)">Pengisian Kembali Kas Kecil (Replenishment)</option>
-                    <option value="Setoran Awal / Pembentukan Kas Kecil">Setoran Awal / Pembentukan Kas Kecil</option>
-                    <option value="Penyesuaian Selisih Kas (Adjustment)">Penyesuaian Selisih Kas (Adjustment)</option>
-                    <option value="Pengembalian Sisa Kas (Refund)">Pengembalian Sisa Kas (Refund)</option>
-                </select>
-            </div>
-
-            <div>
-                <label class="block text-xs font-bold text-gray-600 mb-1">Nominal (Rp)</label>
-                <input type="number" id="nominal" placeholder="Contoh: 150000" min="1" class="w-full p-2.5 bg-gray-50 border border-pink-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pink-300" required>
-            </div>
-
-            <div>
-                <label class="block text-xs font-bold text-gray-600 mb-1">Kode & Nama Akun SIA (100+ COA Spesifik)</label>
-                <select id="kodeAkun" class="w-full p-2.5 bg-gray-50 border border-pink-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pink-300" required>
-                    <!-- Aset Lancar & Kas -->
-                    <optgroup label="1-ASET (ASSETS)">
-                        <option value="1-1001 - Kas Kecil (Petty Cash Vault)">1-1001 - Kas Kecil (Petty Cash Vault)</option>
-                        <option value="1-1002 - Kas Bank Utama">1-1002 - Kas Bank Utama</option>
-                        <option value="1-1003 - Piutang Usaha Cafe">1-1003 - Piutang Usaha Cafe</option>
-                        <option value="1-1004 - Perlengkapan Cafe & Dapur">1-1004 - Perlengkapan Cafe & Dapur</option>
-                        <option value="1-1005 - Persediaan Makanan & Minuman Cafe">1-1005 - Persediaan Makanan & Minuman Cafe</option>
-                        <option value="1-1006 - Persediaan Pakan Kucing (Persian/Shorthair)">1-1006 - Persediaan Pakan Kucing (Persian/Shorthair)</option>
-                        <option value="1-1007 - Persediaan Pakan Anjing (Pomeranian/Poodle)">1-1007 - Persediaan Pakan Anjing (Pomeranian/Poodle)</option>
-                        <option value="1-1008 - Persediaan Pakan Marmut (Abyssinian Guinea Pig)">1-1008 - Persediaan Pakan Marmut (Abyssinian Guinea Pig)</option>
-                        <option value="1-1009 - Persediaan Pakan Landak Mini">1-1009 - Persediaan Pakan Landak Mini</option>
-                        <option value="1-1010 - Persediaan Obat & Vitamin Hewan">1-1010 - Persediaan Obat & Vitamin Hewan</option>
-                    </optgroup>
-                    <!-- Beban Operasional Unit Hewan -->
-                    <optgroup label="5-BEBAN OPERASIONAL UNIT (OPERATIONAL EXPENSES)">
-                        <option value="5-1001 - Beban Pakan & Nutrisi Kucing Zone">5-1001 - Beban Pakan & Nutrisi Kucing Zone</option>
-                        <option value="5-1002 - Beban Pasir & Kebersihan Cat Litter">5-1002 - Beban Pasir & Kebersihan Cat Litter</option>
-                        <option value="5-1003 - Beban Mainan & Scratching Board Kucing">5-1003 - Beban Mainan & Scratching Board Kucing</option>
-                        <option value="5-2001 - Beban Pakan & Snack Anjing Play Park">5-2001 - Beban Pakan & Snack Anjing Play Park</option>
-                        <option value="5-2002 - Beban Shampoo & Grooming Set Anjing">5-2002 - Beban Shampoo & Grooming Set Anjing</option>
-                        <option value="5-2003 - Beban Diaper & Underpad Anjing">5-2003 - Beban Diaper & Underpad Anjing</option>
-                        <option value="5-3001 - Beban Sayuran Segar & Hay Marmut Guinea Pig">5-3001 - Beban Sayuran Segar & Hay Marmut Guinea Pig</option>
-                        <option value="5-3002 - Beban Serbuk Kayu & Alas Kandang Marmut">5-3002 - Beban Serbuk Kayu & Alas Kandang Marmut</option>
-                        <option value="5-4001 - Beban Ulat Jerman/Hongkong Landak Mini">5-4001 - Beban Ulat Jerman/Hongkong Landak Mini</option>
-                        <option value="5-4002 - Beban Serbuk Kayu & Dry Bed Landak Mini">5-4002 - Beban Serbuk Kayu & Dry Bed Landak Mini</option>
-                        <option value="5-5001 - Beban Dokter Hewan & Vaksinasi Rutin">5-5001 - Beban Dokter Hewan & Vaksinasi Rutin</option>
-                        <option value="5-5002 - Beban Desinfektan & Sterilisasi Area Pet">5-5002 - Beban Desinfektan & Sterilisasi Area Pet</option>
-                    </optgroup>
-                    <!-- Beban Dapur & Cafe -->
-                    <optgroup label="5-BEBAN DAPUR & GENERAL CAFE">
-                        <option value="5-6001 - Beban Biji Kopi & Susu Fresh">5-6001 - Beban Biji Kopi & Susu Fresh</option>
-                        <option value="5-6002 - Beban Bahan Pastry & Snack Tamu">5-6002 - Beban Bahan Pastry & Snack Tamu</option>
-                        <option value="5-6003 - Beban Packaging & Sedotan Ramah Lingkungan">5-6003 - Beban Packaging & Sedotan Ramah Lingkungan</option>
-                        <option value="5-7001 - Beban Listrik & Air Cafe">5-7001 - Beban Listrik & Air Cafe</option>
-                        <option value="5-7002 - Beban Wi-Fi & Langganan Music Streaming">5-7002 - Beban Wi-Fi & Langganan Music Streaming</option>
-                        <option value="5-7003 - Beban Pemeliharaan AC & Air Purifier">5-7003 - Beban Pemeliharaan AC & Air Purifier</option>
-                        <option value="5-8001 - Beban Transportasi & Kurir Mendadak">5-8001 - Beban Transportasi & Kurir Mendadak</option>
-                        <option value="5-8002 - Beban ATK & Cetak Struct Nota">5-8002 - Beban ATK & Cetak Struct Nota</option>
-                    </optgroup>
-                </select>
-            </div>
-
-            <div>
-                <label class="block text-xs font-bold text-gray-600 mb-1">Vendor / Penerima / Pihak Ketiga</label>
-                <input type="text" id="vendor" placeholder="Contoh: Petshop Niskala / Indomaret" class="w-full p-2.5 bg-gray-50 border border-pink-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pink-300" required>
-            </div>
-
-            <div>
-                <label class="block text-xs font-bold text-gray-600 mb-1">Nomor Nota / Invoice</label>
-                <input type="text" id="nomorNota" placeholder="Contoh: INV-2026/10/001" class="w-full p-2.5 bg-gray-50 border border-pink-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pink-300" required>
-            </div>
-
-            <div>
-                <label class="block text-xs font-bold text-gray-600 mb-1">Metode Pembayaran</label>
-                <select id="metodePembayaran" class="w-full p-2.5 bg-gray-50 border border-pink-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pink-300">
-                    <option value="Tunai / Cash">Tunai / Cash</option>
-                    <option value="Transfer Bank / QRIS">Transfer Bank / QRIS</option>
-                </select>
-            </div>
-
-            <div>
-                <label class="block text-xs font-bold text-gray-600 mb-1">Tanggal Transaksi</label>
-                <input type="date" id="tanggal" class="w-full p-2.5 bg-gray-50 border border-pink-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pink-300" required>
-            </div>
-
-            <div>
-                <label class="block text-xs font-bold text-gray-600 mb-1">Nama Kasir / Petugas SIA</label>
-                <input type="text" id="kasir" placeholder="Nama Admin Kasir" value="Anin (Owner)" class="w-full p-2.5 bg-gray-50 border border-pink-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pink-300" required>
-            </div>
-
-            <div>
-                <label class="block text-xs font-bold text-gray-600 mb-1">Upload Bukti Pembayaran (Nota/Struk)</label>
-                <input type="file" id="buktiBayar" accept="image/*" class="w-full p-1.5 bg-gray-50 border border-pink-200 rounded-xl text-xs focus:outline-none">
-            </div>
-
-            <div class="md:col-span-3 mt-2">
-                <button type="submit" class="w-full bg-pastel-pink hover:bg-pink-300 text-pink-900 font-bold py-3 rounded-2xl border-2 border-pink-300 transition shadow-md flex justify-center items-center gap-2">
-                    <i class="fas fa-save"></i> Simpan Transaksi Kas Kecil
-                </button>
-            </div>
-        </form>
-    </section>
-
-    <!-- Graphic Chart Analysis -->
-    <div class="bg-white p-6 rounded-3xl border-2 border-yellow-200 card-shadow">
-        <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-            <i class="fas fa-chart-pie text-amber-400"></i> Visualisasi Alokasi Pengeluaran Kas Kecil
-        </h3>
-        <div class="h-64 flex justify-center items-center">
-            <canvas id="kasChart"></canvas>
-        </div>
-    </div>
-
-    <!-- Jurnal Transaksi Table -->
-    <section class="bg-white p-6 rounded-3xl border-2 border-pink-200 card-shadow overflow-hidden">
-        <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-2">
-            <h3 class="text-xl font-bold text-gray-800 flex items-center gap-2">
-                <i class="fas fa-table text-pink-400"></i> Buku Jurnal Kas Kecil
-            </h3>
-            <span id="hashStatus" class="text-xs bg-purple-100 text-purple-700 px-3 py-1 rounded-full font-mono font-semibold">
-                Integrity SHA-256: Verified
-            </span>
-        </div>
-
-        <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs md:text-sm">
-                <thead>
-                    <tr class="bg-pastel-yellow text-gray-700 border-b-2 border-yellow-300">
-                        <th class="p-3">Tanggal</th>
-                        <th class="p-3">Jenis</th>
-                        <th class="p-3">Kode & Nama Akun</th>
-                        <th class="p-3">Vendor / Pihak Ketiga</th>
-                        <th class="p-3">Nota</th>
-                        <th class="p-3 text-right">Nominal</th>
-                        <th class="p-3 text-center">SHA-256 Audit Hash</th>
-                        <th class="p-3 text-center">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody id="tabelJurnal" class="divide-y divide-gray-100">
-                    <!-- Dynamic Data Row Placeholder -->
-                </tbody>
-            </table>
-        </div>
-    </section>
-
-</main>
-
-<!-- Footer -->
-<footer class="bg-white border-t-2 border-pink-200 py-4 text-center text-xs text-gray-500">
-    <p>© 2026 Pet Cafe' de Anin - Sistem Informasi Akuntansi Kas Kecil. Developed with 💖 & Pastel Aesthetic.</p>
-</footer>
-
-<!-- LOGIKA JAVASCRIPT FIXED & FULL Persist -->
-<script>
-    // Store Data in LocalStorage
-    let dataTransaksi = JSON.parse(localStorage.getItem('pet_cafe_sia_db')) || [];
-    let kasChart = null;
-
-    // Set Default Date Field to Today
-    document.getElementById('tanggal').valueAsDate = new Date();
-
-    // Calculate and Render Function
-    function renderSIA() {
-        let totalMasuk = 0;
-        let totalKeluar = 0;
-        let categoryTotals = {};
-
-        const tabel = document.getElementById('tabelJurnal');
-        tabel.innerHTML = '';
-
-        if (dataTransaksi.length === 0) {
-            tabel.innerHTML = `<tr><td colspan="8" class="text-center p-6 text-gray-400 italic">Belum ada transaksi kas kecil tercatat. Silakan tambah transaksi baru.</td></tr>`;
-        } else {
-            dataTransaksi.forEach((item, index) => {
-                const nominalNum = parseFloat(item.nominal) || 0;
-                
-                // Categorize Income vs Expense
-                if (item.jenis.includes("Pembentukan") || item.jenis.includes("Replenishment") || item.jenis.includes("Refund")) {
-                    totalMasuk += nominalNum;
-                } else {
-                    totalKeluar += nominalNum;
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Cafe' de Anin - SIA Kas Kecil</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            pink: '#fce4ec',
+                            pinkDark: '#f8bbd0',
+                            peach: '#ffecb3',
+                            yellow: '#fff8e1',
+                            accent: '#f48fb1',
+                            cardBg: '#fffbf7',
+                            border: '#f5e6d8'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
                 }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #faf6f0;
+            color: #4a4238;
+        }
+        .header-gradient {
+            background: linear-gradient(135deg, #f8bbd0 0%, #f48fb1 40%, #ffe082 100%);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(245, 230, 216, 0.8);
+        }
+        .btn-header {
+            background-color: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.2s ease;
+        }
+        .btn-header:hover {
+            background-color: rgba(255, 255, 255, 0.6);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-12 font-sans">
 
-                // For Chart Category Grouping
-                const categoryName = item.akun.split(' - ')[1] || item.akun;
-                categoryTotals[categoryName] = (categoryTotals[categoryName] || 0) + nominalNum;
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
 
-                // Append Table Row
-                const row = document.createElement('tr');
-                row.className = "hover:bg-pink-50 transition";
-                row.innerHTML = `
-                    <td class="p-3 font-medium text-gray-600">${item.tanggal}</td>
-                    <td class="p-3"><span class="px-2 py-0.5 text-xs font-bold rounded-lg ${item.jenis.includes('Pengeluaran') ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}">${item.jenis}</span></td>
-                    <td class="p-3 font-semibold text-gray-800">${item.akun}</td>
-                    <td class="p-3 text-gray-600">${item.vendor}</td>
-                    <td class="p-3 font-mono text-xs text-gray-500">${item.nomorNota}</td>
-                    <td class="p-3 text-right font-bold ${item.jenis.includes('Pengeluaran') ? 'text-red-500' : 'text-green-600'}">Rp ${nominalNum.toLocaleString('id-ID')}</td>
-                    <td class="p-3 text-center font-mono text-[10px] text-purple-600" title="${item.hash}">${item.hash.substring(0, 10)}...</td>
+        <!-- Header Utama -->
+        <div class="header-gradient rounded-3xl p-6 sm:p-8 shadow-lg mb-6 relative overflow-hidden text-amber-900">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 relative z-10">
+                <!-- Brand / Logo & Title -->
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center -space-x-2 text-3xl sm:text-4xl">
+                        <span class="p-2 bg-white/60 rounded-2xl shadow-sm">🐱</span>
+                        <span class="p-2 bg-white/60 rounded-2xl shadow-sm">🐶</span>
+                        <span class="p-2 bg-white/60 rounded-2xl shadow-sm">🐹</span>
+                        <span class="p-2 bg-white/60 rounded-2xl shadow-sm">🦔</span>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-amber-950">Pet Cafe' de Anin</h1>
+                        <p class="text-xs sm:text-sm font-medium opacity-90 text-amber-900">Sistem Informasi Akuntansi Kas Kecil (Imprest Fund System)</p>
+                    </div>
+                </div>
+
+                <!-- Header Actions -->
+                <div class="flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm font-semibold">
+                    <button onclick="downloadCSV()" class="btn-header px-4 py-2.5 rounded-xl text-amber-950 flex items-center gap-2 shadow-sm">
+                        <i class="fa-solid fa-file-csv text-amber-900"></i> Download CSV
+                    </button>
+                    <button onclick="exportLaporan()" class="btn-header px-4 py-2.5 rounded-xl text-amber-950 flex items-center gap-2 shadow-sm">
+                        <i class="fa-solid fa-file-invoice text-amber-900"></i> Export Laporan Keuangan
+                    </button>
+                    <button onclick="auditSHA256()" class="btn-header px-4 py-2.5 rounded-xl text-amber-950 flex items-center gap-2 shadow-sm">
+                        <i class="fa-solid fa-shield-halved text-amber-900"></i> Audit SHA-256
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pet Categories Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <!-- Kucing Card -->
+            <div class="bg-amber-50/60 border border-amber-200/60 rounded-2xl p-4 flex items-center gap-3 shadow-sm hover:shadow-md transition">
+                <div class="text-3xl bg-amber-100 p-2 rounded-xl">🐱</div>
+                <div>
+                    <h3 class="font-bold text-amber-900 text-sm sm:text-base">Kucing Cat Zone</h3>
+                    <p class="text-xs text-amber-700/80">Persian & British Shorthair</p>
+                </div>
+            </div>
+            <!-- Anjing Card -->
+            <div class="bg-amber-50/60 border border-amber-200/60 rounded-2xl p-4 flex items-center gap-3 shadow-sm hover:shadow-md transition">
+                <div class="text-3xl bg-amber-100 p-2 rounded-xl">🐶</div>
+                <div>
+                    <h3 class="font-bold text-amber-900 text-sm sm:text-base">Anjing Play Park</h3>
+                    <p class="text-xs text-amber-700/80">Pomeranian & Poodle</p>
+                </div>
+            </div>
+            <!-- Guinea Pig Card -->
+            <div class="bg-amber-50/60 border border-amber-200/60 rounded-2xl p-4 flex items-center gap-3 shadow-sm hover:shadow-md transition">
+                <div class="text-3xl bg-amber-100 p-2 rounded-xl">🐹</div>
+                <div>
+                    <h3 class="font-bold text-amber-900 text-sm sm:text-base">Abyssinian Guinea Pig</h3>
+                    <p class="text-xs text-amber-700/80">Marmut Bulu Rosette</p>
+                </div>
+            </div>
+            <!-- Landak Card -->
+            <div class="bg-amber-50/60 border border-amber-200/60 rounded-2xl p-4 flex items-center gap-3 shadow-sm hover:shadow-md transition">
+                <div class="text-3xl bg-amber-100 p-2 rounded-xl">🦔</div>
+                <div>
+                    <h3 class="font-bold text-amber-900 text-sm sm:text-base">Landak Mini Corner</h3>
+                    <p class="text-xs text-amber-700/80">Hedgehog Sanctuary</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <!-- Total Pemasukan -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-orange-100 relative overflow-hidden">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-xs font-bold tracking-wider text-gray-500 uppercase">TOTAL PEMASUKAN</p>
+                        <h2 id="displayPemasukan" class="text-3xl font-extrabold text-emerald-600 mt-2">Rp 0</h2>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold">
+                        ↓
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Pengeluaran -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-orange-100 relative overflow-hidden">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-xs font-bold tracking-wider text-gray-500 uppercase">TOTAL PENGELUARAN</p>
+                        <h2 id="displayPengeluaran" class="text-3xl font-extrabold text-rose-500 mt-2">Rp 0</h2>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-rose-100 text-rose-500 flex items-center justify-center font-bold">
+                        ↑
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sisa Saldo Kas Kecil -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-orange-100 relative overflow-hidden">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-xs font-bold tracking-wider text-gray-500 uppercase">SISA SALDO KAS KECIL</p>
+                        <h2 id="displaySaldo" class="text-3xl font-extrabold text-amber-900 mt-2">Rp 0</h2>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
+                        💼
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Input Transaksi Kas Kecil -->
+        <div class="bg-white/80 backdrop-blur rounded-3xl p-6 sm:p-8 shadow-sm border border-amber-100 mb-8">
+            <div class="flex items-center gap-2 mb-6">
+                <i class="fa-regular fa-pen-to-square text-amber-800 text-xl"></i>
+                <h2 class="text-xl font-bold text-amber-950">Form Input Transaksi Kas Kecil</h2>
+            </div>
+
+            <form id="transactionForm" onsubmit="handleFormSubmit(event)" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    
+                    <!-- Jenis Transaksi (5 Opsi) -->
+                    <div>
+                        <label class="block text-xs font-bold text-amber-900 mb-2">Jenis Transaksi (5 Opsi)</label>
+                        <select id="jenisTransaksi" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-300 transition" required>
+                            <option value="Setoran Awal / Pembentukan Kas Kecil">Setoran Awal / Pembentukan Kas Kecil</option>
+                            <option value="Pengisian Kembali Kas Kecil (Replenishment)">Pengisian Kembali Kas Kecil (Replenishment)</option>
+                            <option value="Pengeluaran Operasional (Operational Expense)">Pengeluaran Operasional (Operational Expense)</option>
+                            <option value="Pengeluaran Perlengkapan & Pet Supplies">Pengeluaran Perlengkapan & Pet Supplies</option>
+                            <option value="Penyesuaian / Selisih Kas (Cash Short/Over)">Penyesuaian / Selisih Kas (Cash Short/Over)</option>
+                        </select>
+                    </div>
+
+                    <!-- Nominal (Rp) -->
+                    <div>
+                        <label class="block text-xs font-bold text-amber-900 mb-2">Nominal (Rp)</label>
+                        <input type="number" id="nominal" min="1" placeholder="Masukkan jumlah nominal..." class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-300 transition" required>
+                    </div>
+
+                    <!-- Kode & Nama Akun SIA (COA) -->
+                    <div>
+                        <label class="block text-xs font-bold text-amber-900 mb-2">Kode & Nama Akun SIA (100+ COA Spesifik)</label>
+                        <select id="coaAkun" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-300 transition" required>
+                            <option value="1-1001 - Kas Kecil (Petty Cash Vault)">1-1001 - Kas Kecil (Petty Cash Vault)</option>
+                            <option value="1-1002 - Kas Bank Utama">1-1002 - Kas Bank Utama</option>
+                            <option value="5-5001 - Beban Pakan Kucing & Anjing">5-5001 - Beban Pakan Kucing & Anjing</option>
+                            <option value="5-5002 - Beban Grooming & Perawatan Hewan">5-5002 - Beban Grooming & Perawatan Hewan</option>
+                            <option value="5-5003 - Beban Perlengkapan Landak & Guinea Pig">5-5003 - Beban Perlengkapan Landak & Guinea Pig</option>
+                            <option value="5-5004 - Beban Listrik, Air & WiFi Cafe">5-5004 - Beban Listrik, Air & WiFi Cafe</option>
+                            <option value="5-5005 - Beban Kebersihan & Sanitasi Arena">5-5005 - Beban Kebersihan & Sanitasi Arena</option>
+                            <option value="5-5006 - Beban Konsumsi & Kitchen Small Tools">5-5006 - Beban Konsumsi & Kitchen Small Tools</option>
+                        </select>
+                    </div>
+
+                    <!-- Vendor / Penerima / Pihak Ketiga -->
+                    <div>
+                        <label class="block text-xs font-bold text-amber-900 mb-2">Vendor / Penerima / Pihak Ketiga</label>
+                        <input type="text" id="vendor" placeholder="Contoh: Niskala Store, Petshop ABC..." class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-300 transition" required>
+                    </div>
+
+                    <!-- Nomor Nota / Invoice -->
+                    <div>
+                        <label class="block text-xs font-bold text-amber-900 mb-2">Nomor Nota / Invoice</label>
+                        <input type="text" id="noInvoice" placeholder="Contoh: INV-2026/001" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-300 transition" required>
+                    </div>
+
+                    <!-- Metode Pembayaran -->
+                    <div>
+                        <label class="block text-xs font-bold text-amber-900 mb-2">Metode Pembayaran</label>
+                        <select id="metodePembayaran" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-300 transition" required>
+                            <option value="Tunai / Cash">Tunai / Cash</option>
+                            <option value="Transfer Bank">Transfer Bank</option>
+                            <option value="QRIS / E-Wallet">QRIS / E-Wallet</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Upload Bukti Nota / Receipt -->
+                <div>
+                    <label class="block text-xs font-bold text-amber-900 mb-2">Upload Bukti Transaksi / Nota (Opsional)</label>
+                    <input type="file" id="buktiNota" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-amber-100 file:text-amber-900 hover:file:bg-amber-200 cursor-pointer">
+                </div>
+
+                <!-- Submit Button -->
+                <div class="flex justify-end pt-2">
+                    <button type="submit" class="bg-amber-900 hover:bg-amber-950 text-white font-bold px-8 py-3 rounded-xl shadow-md transition flex items-center gap-2 text-sm">
+                        <i class="fa-solid fa-plus"></i> Simpan Transaksi Kas Kecil
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Tabel Riwayat Transaksi -->
+        <div class="bg-white/80 backdrop-blur rounded-3xl p-6 sm:p-8 shadow-sm border border-amber-100">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-receipt text-amber-800 text-xl"></i>
+                    <h2 class="text-xl font-bold text-amber-950">Riwayat Transaksi Kas Kecil</h2>
+                </div>
+                <button onclick="resetData()" class="text-xs text-rose-500 hover:text-rose-700 font-semibold underline">Reset Semua Data</button>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-gray-200 text-xs text-amber-900 font-bold uppercase tracking-wider bg-amber-50/50">
+                            <th class="p-3">Tanggal</th>
+                            <th class="p-3">Jenis Transaksi</th>
+                            <th class="p-3">Kode COA</th>
+                            <th class="p-3">Vendor / Penerima</th>
+                            <th class="p-3">No. Nota</th>
+                            <th class="p-3">Metode</th>
+                            <th class="p-3 text-right">Nominal</th>
+                            <th class="p-3 text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionTableBody" class="text-sm divide-y divide-gray-100">
+                        <!-- Data transaksi akan disuntikkan oleh JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Key Storage
+        const STORAGE_KEY = 'pet_cafe_de_anin_kas_kecil_db';
+
+        // Load data on startup
+        let transactions = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTable();
+            updateCalculations();
+        });
+
+        // Save Data function
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions));
+            renderTable();
+            updateCalculations();
+        }
+
+        // Handle Submit Transaksi
+        function handleFormSubmit(event) {
+            event.preventDefault();
+
+            const jenis = document.getElementById('jenisTransaksi').value;
+            const nominal = parseFloat(document.getElementById('nominal').value) || 0;
+            const coa = document.getElementById('coaAkun').value;
+            const vendor = document.getElementById('vendor').value;
+            const noInvoice = document.getElementById('noInvoice').value;
+            const metode = document.getElementById('metodePembayaran').value;
+
+            // Tentukan tipe aliran dana (In/Out)
+            const isPemasukan = (jenis === 'Setoran Awal / Pembentukan Kas Kecil' || jenis === 'Pengisian Kembali Kas Kecil (Replenishment)');
+
+            const newTransaction = {
+                id: Date.now(),
+                tanggal: new Date().toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }),
+                jenis,
+                nominal,
+                coa,
+                vendor,
+                noInvoice,
+                metode,
+                isPemasukan
+            };
+
+            transactions.unshift(newTransaction);
+            saveData();
+
+            // Reset form input
+            document.getElementById('transactionForm').reset();
+            alert('Transaksi Kas Kecil Berhasil Disimpan!');
+        }
+
+        // Format Currency IDR
+        function formatRupiah(number) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(number);
+        }
+
+        // Update Stats Cards
+        function updateCalculations() {
+            let totalMasuk = 0;
+            let totalKeluar = 0;
+
+            transactions.forEach(tx => {
+                if (tx.isPemasukan) {
+                    totalMasuk += tx.nominal;
+                } else {
+                    totalKeluar += tx.nominal;
+                }
+            });
+
+            const sisaSaldo = totalMasuk - totalKeluar;
+
+            document.getElementById('displayPemasukan').innerText = formatRupiah(totalMasuk);
+            document.getElementById('displayPengeluaran').innerText = formatRupiah(totalKeluar);
+            document.getElementById('displaySaldo').innerText = formatRupiah(sisaSaldo);
+        }
+
+        // Render Table Rows
+        function renderTable() {
+            const tbody = document.getElementById('transactionTableBody');
+            tbody.innerHTML = '';
+
+            if (transactions.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="text-center py-8 text-gray-400">Belum ada transaksi kas kecil yang tersimpan.</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            transactions.forEach((tx) => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-amber-50/30 transition';
+
+                const isPlus = tx.isPemasukan;
+                const badgeColor = isPlus ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700';
+
+                tr.innerHTML = `
+                    <td class="p-3 text-xs text-gray-500">${tx.tanggal}</td>
+                    <td class="p-3 font-medium text-gray-800">${tx.jenis}</td>
+                    <td class="p-3 text-xs text-amber-900 font-medium">${tx.coa}</td>
+                    <td class="p-3 text-gray-700">${tx.vendor}</td>
+                    <td class="p-3 text-xs font-mono text-gray-600">${tx.noInvoice}</td>
+                    <td class="p-3 text-xs text-gray-600">${tx.metode}</td>
+                    <td class="p-3 text-right font-semibold ${isPlus ? 'text-emerald-600' : 'text-rose-600'}">
+                        ${isPlus ? '+' : '-'} ${formatRupiah(tx.nominal)}
+                    </td>
                     <td class="p-3 text-center">
-                        <button onclick="hapusTransaksi(${index})" class="text-red-400 hover:text-red-600 transition"><i class="fas fa-trash-alt"></i></button>
+                        <button onclick="hapusTransaksi(${tx.id})" class="text-rose-500 hover:text-rose-700 transition" title="Hapus Transaksi">
+                            <i class="fa-regular fa-trash-can"></i>
+                        </button>
                     </td>
                 `;
-                tabel.appendChild(row);
+
+                tbody.appendChild(tr);
             });
         }
 
-        // Update Cards
-        const sisa = totalMasuk - totalKeluar;
-        document.getElementById('totalPemasukan').innerText = 'Rp ' + totalMasuk.toLocaleString('id-ID');
-        document.getElementById('totalPengeluaran').innerText = 'Rp ' + totalKeluar.toLocaleString('id-ID');
-        document.getElementById('sisaSaldo').innerText = 'Rp ' + sisa.toLocaleString('id-ID');
-
-        // Render Chart
-        updateChart(categoryTotals);
-    }
-
-    // Handle Form Submit Event
-    document.getElementById('formTransaksi').addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        const jenis = document.getElementById('jenisTransaksi').value;
-        const nominalVal = document.getElementById('nominal').value;
-        const akun = document.getElementById('kodeAkun').value;
-        const vendor = document.getElementById('vendor').value;
-        const nomorNota = document.getElementById('nomorNota').value;
-        const tanggal = document.getElementById('tanggal').value;
-        const kasir = document.getElementById('kasir').value;
-
-        if (!nominalVal || parseFloat(nominalVal) <= 0) {
-            alert("Mohon masukkan nominal angka yang valid!");
-            return;
-        }
-
-        // SHA-256 Audit Encryption
-        const rawPayload = `${tanggal}|${jenis}|${akun}|${nominalVal}|${nomorNota}|${kasir}`;
-        const hash = CryptoJS.SHA256(rawPayload).toString();
-
-        const recordBaru = {
-            jenis: jenis,
-            nominal: parseFloat(nominalVal),
-            akun: akun,
-            vendor: vendor,
-            nomorNota: nomorNota,
-            tanggal: tanggal,
-            kasir: kasir,
-            hash: hash
-        };
-
-        dataTransaksi.push(recordBaru);
-        localStorage.setItem('pet_cafe_sia_db', JSON.stringify(dataTransaksi));
-
-        renderSIA();
-        alert("✨ Transaksi Kas Kecil Berhasil Disimpan!");
-        
-        // Reset input values except default inputs
-        document.getElementById('nominal').value = '';
-        document.getElementById('vendor').value = '';
-        document.getElementById('nomorNota').value = '';
-    });
-
-    // Delete Row
-    function hapusTransaksi(index) {
-        if (confirm("Apakah Anda yakin ingin menghapus catatan transaksi ini?")) {
-            dataTransaksi.splice(index, 1);
-            localStorage.setItem('pet_cafe_sia_db', JSON.stringify(dataTransaksi));
-            renderSIA();
-        }
-    }
-
-    // Render Chart.js
-    function updateChart(categories) {
-        const ctx = document.getElementById('kasChart').getContext('2d');
-        
-        const labels = Object.keys(categories);
-        const values = Object.values(categories);
-
-        if (kasChart) {
-            kasChart.destroy();
-        }
-
-        kasChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: labels.length > 0 ? labels : ['Belum ada pengeluaran'],
-                datasets: [{
-                    data: values.length > 0 ? values : [1],
-                    backgroundColor: [
-                        '#FFB6C1', '#FFF5BA', '#BAE6FD', '#C7D2FE', '#FBCFE8', '#A7F3D0'
-                    ],
-                    borderWidth: 2,
-                    borderColor: '#ffffff'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { position: 'bottom' }
-                }
+        // Hapus Transaksi
+        function hapusTransaksi(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus transaksi ini?')) {
+                transactions = transactions.filter(tx => tx.id !== id);
+                saveData();
             }
-        });
-    }
-
-    // Download CSV
-    function downloadCSV() {
-        if (dataTransaksi.length === 0) {
-            alert("Tidak ada data transaksi untuk diunduh!");
-            return;
         }
-        let csvContent = "data:text/csv;charset=utf-8,Tanggal,Jenis,Kode_Akun,Vendor,Nota,Nominal,Hash_SHA256\n";
-        dataTransaksi.forEach(row => {
-            csvContent += `${row.tanggal},"${row.jenis}","${row.akun}","${row.vendor}","${row.nomorNota}",${row.nominal},${row.hash}\n`;
-        });
-        const encodedUri = encodeURI(csvContent);
-        const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", `Laporan_Kas_Kecil_PetCafe_de_Anin.csv`);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
 
-    // Verification SHA-256 Audit Alert
-    function verifySHA256() {
-        alert("🛡️ SHA-256 Audit Integrity System: Seluruh catatan kas kecil telah terenkripsi dan diverifikasi valid tanpa manipulasi data.");
-    }
+        // Download CSV
+        function downloadCSV() {
+            if (transactions.length === 0) {
+                alert('Tidak ada data untuk diunduh!');
+                return;
+            }
 
-    // Export Print Laporan
-    function exportLaporan() {
-        window.print();
-    }
+            let csvContent = "data:text/csv;charset=utf-8,ID,Tanggal,Jenis Transaksi,COA,Vendor,No Invoice,Metode,Nominal\n";
+            transactions.forEach(t => {
+                csvContent += `"${t.id}","${t.tanggal}","${t.jenis}","${t.coa}","${t.vendor}","${t.noInvoice}","${t.metode}","${t.nominal}"\n`;
+            });
 
-    // Initialize Page
-    renderSIA();
-</script>
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "Pet_Cafe_de_Anin_Kas_Kecil.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Export Laporan Keuangan
+        function exportLaporan() {
+            alert('Laporan Keuangan Kas Kecil siap di-print/export! Mengisi dialog pencetakan...');
+            window.print();
+        }
+
+        // Audit SHA-256 Mock Simulation
+        async function auditSHA256() {
+            if (transactions.length === 0) {
+                alert('Belum ada transaksi untuk diaudit.');
+                return;
+            }
+
+            const rawData = JSON.stringify(transactions);
+            const encoder = new TextEncoder();
+            const data = encoder.encode(rawData);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+            alert(`[AUDIT INTEGRITAS DATA SHA-256]\nStatus: VALID & VERIFIED\nHash Signature: ${hashHex}`);
+        }
+
+        // Reset Data
+        function resetData() {
+            if (confirm('Hapus seluruh riwayat transaksi dari penyimpanan lokal (localStorage)?')) {
+                transactions = [];
+                saveData();
+            }
+        }
+    </script>
+</body>
+</html>

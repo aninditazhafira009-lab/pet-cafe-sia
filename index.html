@@ -401,7 +401,59 @@
 
         // 3. Render Transaksi & Update Summary
         function loadTransactions() {
-            fetch('/api/transactions')
+// 3. Render Transaksi & Update Summary (Direct Supabase)
+async function loadTransactions() {
+    // Ambil data langsung dari Supabase
+    const { data, error } = await supabase
+        .from('transaksi_kas_kecil')
+        .select('*')
+        .order('id', { ascending: false });
+
+    if (error) {
+        console.error('Gagal mengambil data dari Supabase:', error);
+        return;
+    }
+
+    const tbody = document.getElementById('txTable');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    let totalInc = 0;
+    let totalExp = 0;
+
+    data.forEach(item => {
+        // Hitung Saldo / Total
+        if (item.jenis_transaksi === 'Pengisian Kembali Kas Kecil (Replenishment)') {
+            totalInc += Number(item.nominal || 0);
+        } else {
+            totalExp += Number(item.nominal || 0);
+        }
+
+        // Tampilkan Baris Tabel
+        const tr = document.createElement('tr');
+        tr.className = "border-b border-rose-100 hover:bg-rose-50/50 transition";
+        tr.innerHTML = `
+            <td class="p-3 font-mono text-sm">${item.tanggal || '-'}</td>
+            <td class="p-3"><span class="px-2 py-1 bg-rose-100 text-rose-700 rounded-lg text-xs font-semibold">${item.jenis_transaksi || '-'}</span></td>
+            <td class="p-3 font-medium">${item.keterangan || '-'}</td>
+            <td class="p-3 text-sm text-gray-600">${item.vendor || '-'}</td>
+            <td class="p-3 font-semibold text-rose-600">Rp ${(Number(item.nominal) || 0).toLocaleString('id-ID')}</td>
+            <td class="p-3 text-sm text-gray-500">${item.nama_kasir || '-'}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    // Update Angka di Card Atas
+    if (document.getElementById('stateIncome')) {
+        document.getElementById('stateIncome').innerText = `Rp ${totalInc.toLocaleString('id-ID')}`;
+    }
+    if (document.getElementById('stateExpense')) {
+        document.getElementById('stateExpense').innerText = `Rp ${totalExp.toLocaleString('id-ID')}`;
+    }
+    if (document.getElementById('stateBalance')) {
+        document.getElementById('stateBalance').innerText = `Rp ${(totalInc - totalExp).toLocaleString('id-ID')}`;
+    }
+}
                 .then(res => res.json())
                 .then(data => {
                     const tbody = document.getElementById('txTable');
@@ -471,8 +523,33 @@
                 description: document.getElementById('description').value
             };
 
-            fetch('/api/transactions', {
-                method: 'POST',
+           // Simpan Transaksi Baru ke Supabase
+async function handleFormSubmit(event) {
+    event.preventDefault();
+
+    const newTx = {
+        jenis_transaksi: document.getElementById('jenisTransaksi')?.value || '',
+        nominal: parseFloat(document.getElementById('nominal')?.value) || 0,
+        kode_akun: document.getElementById('kodeAkun')?.value || '',
+        vendor: document.getElementById('vendor')?.value || '',
+        nomor_nota: document.getElementById('nomorNota')?.value || '',
+        tanggal: document.getElementById('tanggal')?.value || new Date().toISOString().split('T')[0],
+        nama_kasir: document.getElementById('namaKasir')?.value || '',
+        keterangan: document.getElementById('keterangan')?.value || ''
+    };
+
+    const { data, error } = await supabase
+        .from('transaksi_kas_kecil')
+        .insert([newTx]);
+
+    if (error) {
+        alert('Gagal menyimpan transaksi: ' + error.message);
+        console.error(error);
+    } else {
+        alert('Transaksi berhasil disimpan!');
+        loadTransactions(); // Langsung reload tabel tanpa refresh halaman
+    }
+},
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             }).then(res => res.json()).then(() => {

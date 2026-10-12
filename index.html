@@ -572,7 +572,36 @@ async function handleFormSubmit(event) {
         }
 
         // Initial Load
-        loadTransactions();
+        // Populate Dropdown Kode & Nama Akun SIA
+function populateAccounts() {
+    const coaSelect = document.getElementById('kodeAkun') || document.querySelector('select[name="kode_akun"]') || document.querySelectorAll('select')[1];
+    if (!coaSelect) return;
+
+    const accountItems = [
+        { code: '1-1001', name: 'Kas Kecil (Petty Cash Vault)' },
+        { code: '5-1001', name: 'Beban Perlengkapan Hewan & Cafe' },
+        { code: '5-1002', name: 'Beban Makanan & Konsumsi Satwa' },
+        { code: '5-1003', name: 'Beban Pemeliharaan & Grooming' },
+        { code: '5-1004', name: 'Beban Kebersihan & Sanitasi' },
+        { code: '5-1005', name: 'Beban Transportasi & Kurir' },
+        { code: '5-1006', name: 'Beban Listrik, Air & Internet' },
+        { code: '5-1099', name: 'Beban Operasional Lain-Lain' }
+    ];
+
+    coaSelect.innerHTML = '<option value="">-- Pilih Kode & Nama Akun --</option>';
+    accountItems.forEach(item => {
+        const opt = document.createElement('option');
+        opt.value = item.code;
+        opt.textContent = `${item.code} - ${item.name}`;
+        coaSelect.appendChild(opt);
+    });
+}
+
+// Jalankan otomatis saat halaman dibuka
+document.addEventListener('DOMContentLoaded', () => {
+    populateAccounts();
+    if (typeof loadTransactions === 'function') loadTransactions();
+})
     </script>
 </body>
 </html>

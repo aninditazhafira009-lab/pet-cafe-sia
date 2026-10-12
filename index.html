@@ -148,8 +148,17 @@
                     <input type="number" id="amount" placeholder="Contoh: 150000" class="w-full p-2.5 rounded-xl border border-pink-200 bg-amber-50/30 focus:ring-2 focus:ring-amber-300 outline-none text-sm" required>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-pink-900 mb-1">Kode & Nama Akun SIA (100+ COA Spesifik)</label>
-                    <select id="coa" class="w-full p-2.5 rounded-xl border border-pink-200 bg-amber-50/30 focus:ring-2 focus:ring-amber-300 outline-none text-sm" required></select>
+                   <select id="kodeAkun" name="kode_akun" class="w-full p-2.5 bg-gray-50 border rounded-lg text-sm" required>
+    <option value="">-- Pilih Kode & Nama Akun --</option>
+    <option value="1-1001">1-1001 - Kas Kecil (Petty Cash Vault)</option>
+    <option value="5-1001">5-1001 - Beban Perlengkapan Hewan & Cafe</option>
+    <option value="5-1002">5-1002 - Beban Makanan & Konsumsi Satwa</option>
+    <option value="5-1003">5-1003 - Beban Pemeliharaan & Grooming</option>
+    <option value="5-1004">5-1004 - Beban Kebersihan & Sanitasi</option>
+    <option value="5-1005">5-1005 - Beban Transportasi & Kurir</option>
+    <option value="5-1006">5-1006 - Beban Listrik, Air & Internet</option>
+    <option value="5-1099">5-1099 - Beban Operasional Lain-Lain</option>
+</select>
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-pink-900 mb-1">Vendor / Penerima / Pihak Ketiga</label>
